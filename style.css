@@ -316,36 +316,38 @@ select:focus, input[type="text"]:focus {
 
 .download-dropdown {
     position: relative;
-    display: flex;
-}
-
-.download-dropdown:hover .export-options {
-    display: flex;
+    display: inline-block;
 }
 
 .export-options {
     display: none;
     position: absolute;
-    bottom: 100%;
+    bottom: calc(100% + 8px);
     right: 0;
+    width: 160px;
     background-color: var(--bg-panel);
     border: 1px solid var(--border-subtle);
-    border-radius: 4px;
+    border-radius: 6px;
     flex-direction: column;
-    margin-bottom: 6px;
+    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.4);
+    z-index: 100;
     overflow: hidden;
-    z-index: 10;
+}
+
+.export-options.show {
+    display: flex;
 }
 
 .export-opt {
     background: none;
     border: none;
     color: var(--text-main);
-    padding: 8px 16px;
-    font-size: 0.78rem;
+    padding: 10px 14px;
+    font-size: 0.8rem;
+    font-family: var(--font-mono);
     text-align: left;
     cursor: pointer;
-    font-family: var(--font-mono);
+    transition: background-color 0.15s, color 0.15s;
 }
 
 .export-opt:hover {

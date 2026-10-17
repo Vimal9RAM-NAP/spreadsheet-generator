@@ -12,6 +12,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const tableBody = document.getElementById('tableBody');
     const dataStats = document.getElementById('dataStats');
     
+    const downloadBtn = document.getElementById('downloadBtn');
+    const exportDropdown = document.querySelector('.export-options');
     const exportXlsx = document.getElementById('exportXlsx');
     const exportCsv = document.getElementById('exportCsv');
     const exportJson = document.getElementById('exportJson');
@@ -174,7 +176,19 @@ document.addEventListener('DOMContentLoaded', () => {
         renderTable([]);
     });
 
+    downloadBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        exportDropdown.classList.toggle('show');
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.download-dropdown')) {
+            exportDropdown.classList.remove('show');
+        }
+    });
+
     exportXlsx.addEventListener('click', () => {
+        exportDropdown.classList.remove('show');
         const exportWorkbookData = {};
         Object.entries(sheetsStore).forEach(([sheetName, data]) => {
             if (data.grid && data.grid.length > 0) {
@@ -185,11 +199,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     exportCsv.addEventListener('click', () => {
+        exportDropdown.classList.remove('show');
         const currentGrid = sheetsStore[activeSheet]?.grid || [];
         Exporter.toCsv(currentGrid, `${filenameInput.value || 'ActiveTabs_Export'}_${activeSheet}`);
     });
 
     exportJson.addEventListener('click', () => {
+        exportDropdown.classList.remove('show');
         const currentGrid = sheetsStore[activeSheet]?.grid || [];
         Exporter.toJson(currentGrid, `${filenameInput.value || 'ActiveTabs_Export'}_${activeSheet}`);
     });
