@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Active Tabs | Spreadsheet Generator & Converter</title>
+    <meta name="description" content="Convert raw AI outputs and structured text into instant spreadsheets.">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" defer></script>
+</head>
+<body>
+
+    <header class="app-header">
+        <div class="logo-group">
+            <span class="logo-name">Active Tabs</span>
+        </div>
+        <div class="version-tag">v1.0.0</div>
+    </header>
+
+    <main class="workspace-grid">
+        <section class="workspace-panel panel-left">
+            <div class="panel-title">
+                <h2>Ingestion & Controls</h2>
+                <span class="panel-subtitle">Paste raw text, AI tables, or unstructured data</span>
+            </div>
+            <div class="input-container">
+                <textarea id="rawInput" placeholder="Paste data copied from ChatGPT, Claude, Gemini, or raw text here...&#10;&#10;Examples:&#10;| ID | Name | Role | Salary |&#10;|---|---|---|---|&#10;| 101 | Alex | Developer | $95,000 |"></textarea>
+            </div>
+        </section>
+
+        <section class="workspace-panel panel-right">
+            <div class="preview-header">
+                <h2>Live Preview & Active Tabs</h2>
+                <div class="stats-badge" id="dataStats">0 Rows × 0 Cols</div>
+            </div>
+
+            <div class="tabs-bar" id="tabsBar">
+                <button class="tab-item active" data-sheet="Sheet1">Sheet 1</button>
+                <button class="tab-item add-tab-btn" id="addSheetBtn">+ New Sheet</button>
+            </div>
+
+            <div class="table-scroll-wrapper">
+                <table id="previewTable" class="data-table">
+                    <thead>
+                        <tr id="tableHead">
+                            <th>#</th>
+                            <th>Column 1</th>
+                            <th>Column 2</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <tr>
+                            <td colspan="3" class="empty-state">No data generated yet. Paste raw data into Ingestion and select format below.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bottom-action-bar">
+        <div class="action-block block-choosing">
+            <label for="delimiterSelect">Format / Delimiter</label>
+            <select id="delimiterSelect">
+                <option value="auto" selected>Auto Detect</option>
+                <option value="markdown">Markdown Table (|)</option>
+                <option value=",">CSV (,)</option>
+                <option value="&#9;">TSV (\t)</option>
+                <option value=";">Semicolon (;)</option>
+                <option value="|">Pipe (|)</option>
+                <option value="json">JSON Array</option>
+            </select>
+        </div>
+
+        <div class="action-block block-adjustments">
+            <label class="checkbox-label">
+                <input type="checkbox" id="hasHeader" checked> First Row Contains Headers
+            </label>
+            <label class="checkbox-label">
+                <input type="checkbox" id="multiTableDetect" checked> Auto-Split Multi-Table Outputs
+            </label>
+        </div>
+
+        <div class="action-block block-reset">
+            <button id="resetBtn" class="btn btn-danger">Reset All</button>
+        </div>
+
+        <div class="action-block block-download">
+            <input type="text" id="filenameInput" value="ActiveTabs_Export" placeholder="Filename...">
+            <div class="download-dropdown">
+                <button id="downloadBtn" class="btn btn-success">Download</button>
+                <div class="export-options">
+                    <button id="exportXlsx" class="export-opt">Excel (.xlsx)</button>
+                    <button id="exportCsv" class="export-opt">CSV (.csv)</button>
+                    <button id="exportJson" class="export-opt">JSON (.json)</button>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/parser.js" defer></script>
+    <script src="js/exporter.js" defer></script>
+    <script src="js/app.js" defer></script>
+</body>
+</html>
