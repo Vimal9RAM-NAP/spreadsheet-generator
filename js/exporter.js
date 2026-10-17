@@ -7,8 +7,9 @@ const Exporter = {
 
         const wb = XLSX.utils.book_new();
 
-        Object.entries(sheetsData).forEach(([sheetName, grid]) => {
-            if (grid.length > 0) {
+        Object.entries(sheetsData).forEach(([sheetName, data]) => {
+            const grid = data.grid || data;
+            if (grid && grid.length > 0) {
                 const ws = XLSX.utils.aoa_to_sheet(grid);
                 XLSX.utils.book_append_sheet(wb, ws, sheetName);
             }
@@ -18,12 +19,13 @@ const Exporter = {
     },
 
     toCsv(grid, filename = 'ActiveTabs_Export') {
+        if (!grid || grid.length === 0) return;
         const csvContent = grid.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')).join('\n');
         this.downloadFile(csvContent, `${filename}.csv`, 'text/csv;charset=utf-8;');
     },
 
     toJson(grid, filename = 'ActiveTabs_Export') {
-        if (grid.length < 2) return;
+        if (!grid || grid.length < 2) return;
 
         const headers = grid[0];
         const rows = grid.slice(1);
@@ -31,7 +33,7 @@ const Exporter = {
         const jsonObjects = rows.map(row => {
             const obj = {};
             headers.forEach((header, index) => {
-                obj[header] = row[index] || '';
+                obj[header] = row[index] !== undefined ? row[index] : '';
             });
             return obj;
         });
